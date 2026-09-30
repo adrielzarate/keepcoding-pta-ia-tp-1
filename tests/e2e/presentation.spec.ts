@@ -1,0 +1,47 @@
+import { expect, test } from '@playwright/test';
+import { testPassword } from '../helpers.js';
+test('owner edits the presentation and a visitor sees the saved content', async ({ page }) => {
+  await page.goto('/admin');
+  await expect(page).toHaveURL(/\/admin\/login$/);
+  await page.getByLabel('Username').fill('owner');
+  await page.getByLabel('Password').fill(testPassword);
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await expect(page.getByRole('heading', { name: 'Your introduction.' })).toBeVisible();
+  await page.getByLabel('Name', { exact: true }).fill('Adriel Zarate');
+  await page.getByLabel('Professional title').fill('Fullstack developer');
+  await page.getByLabel('Biography').fill('I build thoughtful web applications.\n\nFrom the first idea to the final detail.');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByRole('status').first()).toContainText('saved');
+  await page.screenshot({ path: 'test-results/admin-desktop.png', fullPage: true });
+  await page.getByRole('link', { name: 'View website' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Fullstack developer');
+  await expect(page.getByText('I build thoughtful web applications.')).toBeVisible();
+  await page.screenshot({ path: 'test-results/home-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 390);
+  await page.screenshot({ path: 'test-results/home-mobile.png', fullPage: true });
+  await page.goto('/admin');
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  await page.goto('/admin');
+  await expect(page).toHaveURL(/\/admin\/login$/);
+});
+test('browser validation explains invalid input and keeps the previous value', async ({ page }) => {
+  await page.goto('/admin/login');
+  await page.getByLabel('Username').fill('owner'); await page.getByLabel('Password').fill(testPassword);
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  const before = await page.getByLabel('Name', { exact: true }).inputValue();
+  await page.getByLabel('Name', { exact: true }).fill('  ');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByText('Name is required.')).toBeVisible();
+  await page.reload(); await expect(page.getByLabel('Name', { exact: true })).toHaveValue(before);
+});
+test('editing works without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false }); const page = await context.newPage();
+  await page.goto('http://127.0.0.1:3107/admin/login');
+  await page.getByLabel('Username').fill('owner'); await page.getByLabel('Password').fill(testPassword);
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByLabel('Professional title').fill('Fullstack developer');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByText('Your presentation has been saved.')).toBeVisible();
+  await context.close();
+});

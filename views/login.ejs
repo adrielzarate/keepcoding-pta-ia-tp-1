@@ -1,0 +1,13 @@
+<%- include('partials/head', { title: 'Sign in — Portfolio', description: 'Portfolio administration' }) %>
+<header class="site-header wrap"><a class="wordmark" href="/">Portfolio<span class="accent">.</span></a><a class="nav-link" href="/">Back to website ↗</a></header>
+<main id="main" class="login-shell">
+  <p class="eyebrow">Private workspace</p><h1 class="page-title">Welcome back.</h1><p class="muted">Sign in to update your portfolio.</p>
+  <% if (error) { %><p class="notice error" role="alert"><%= error %></p><% } %>
+  <form method="post" action="/admin/login" class="stack">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <div class="field"><label for="username">Username</label><input id="username" name="username" value="<%= username %>" autocomplete="username" required maxlength="100" autofocus></div>
+    <div class="field"><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required maxlength="256"></div>
+    <button class="button" type="submit">Sign in <span aria-hidden="true">→</span></button>
+  </form>
+</main>
+</body></html>

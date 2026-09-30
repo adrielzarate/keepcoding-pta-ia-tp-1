@@ -1,0 +1,44 @@
+rules:
+  - id: no-eval
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: Do not execute strings as code.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+  - id: parameterized-sql
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: Use bound SQL parameters instead of string interpolation.
+    pattern-either:
+      - pattern: $DB.prepare(`...${...}...`)
+      - pattern: $DB.exec(`...${...}...`)
+      - pattern: $DB.prepare($A + $B)
+  - id: no-unsafe-dom-html
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: Use textContent or an explicitly reviewed sanitizer for untrusted content.
+    pattern-either:
+      - pattern: $ELEMENT.innerHTML = $VALUE
+      - pattern: $ELEMENT.outerHTML = $VALUE
+      - pattern: $ELEMENT.insertAdjacentHTML(...)
+  - id: no-shell-command-execution
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: Use an executable and separate argument list; avoid shell execution.
+    pattern-either:
+      - pattern: exec(...)
+      - pattern: execSync(...)
+      - pattern: "spawn($CMD, $ARGS, { ..., shell: true, ... })"
+  - id: no-disabled-tls-validation
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: Do not disable TLS certificate validation.
+    pattern: "{ ..., rejectUnauthorized: false, ... }"
+  - id: escape-template-content
+    languages: [generic]
+    severity: ERROR
+    message: Escape dynamic template content; reserve raw output for static partial includes.
+    paths:
+      include: ["*.ejs"]
+    pattern-regex: '<%-(?!\s*include\()[^%]+%>'

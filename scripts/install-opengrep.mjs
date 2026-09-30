@@ -1,0 +1,16 @@
+import { readFile, mkdir, writeFile, chmod, rename } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { resolve } from 'node:path';
+const release = JSON.parse(await readFile(new URL('../security/opengrep-release.json', import.meta.url), 'utf8'));
+const platforms = { 'darwin-x64': 'opengrep_osx_x86', 'darwin-arm64': 'opengrep_osx_arm64', 'linux-x64': 'opengrep_manylinux_x86', 'linux-arm64': 'opengrep_manylinux_aarch64' };
+const asset = release.assets[platforms[`${process.platform}-${process.arch}`]];
+if (!asset) throw new Error('Unsupported platform. Install the pinned OpenGrep release and set OPENGREP_BIN.');
+const response = await fetch(asset.url);
+if (!response.ok) throw new Error(`OpenGrep download failed: ${response.status}`);
+const bytes = new Uint8Array(await response.arrayBuffer());
+if (createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error('OpenGrep checksum mismatch.');
+await mkdir('.tools', { recursive: true });
+await writeFile('.tools/opengrep.download', bytes);
+await chmod('.tools/opengrep.download', 0o755);
+await rename('.tools/opengrep.download', '.tools/opengrep');
+console.log(`OpenGrep ${release.version} installed at ${resolve('.tools/opengrep')}; SHA256 verified.`);

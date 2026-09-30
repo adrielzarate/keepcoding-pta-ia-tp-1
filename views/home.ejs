@@ -1,0 +1,14 @@
+<%- include('partials/head', { title: profile.name + ' — ' + profile.title, description: profile.title }) %>
+<header class="site-header wrap"><a class="wordmark" href="/"><%= profile.name %><span class="accent">.</span></a><a class="nav-link" href="#about">About <span aria-hidden="true">↘</span></a></header>
+<main id="main" class="wrap">
+  <section class="hero" aria-labelledby="intro-title">
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span> A personal introduction</p>
+    <h1 id="intro-title"><%= profile.title %><span class="accent">.</span></h1>
+    <div class="hero-bottom"><p>Hi, I’m <%= profile.name %>.</p><a class="text-link" href="#about">Get to know me <span aria-hidden="true">↓</span></a></div>
+  </section>
+  <section id="about" class="about" aria-labelledby="about-title">
+    <div><p class="eyebrow">01 / About</p><h2 id="about-title">A little<br>about me.</h2></div>
+    <div class="biography"><% for (const paragraph of profile.biography.split(/\n\s*\n/)) { %><p><%= paragraph %></p><% } %></div>
+  </section>
+</main>
+<%- include('partials/footer', { name: profile.name }) %>

@@ -1,0 +1,17 @@
+META
+Completa la implementación técnica del PRD de este portfolio hasta dejar el producto implementado, probado y documentado. El PRD principal es `docs/prd.md`; consulta también sus historias, los ADR, el código y las pruebas existentes.
+
+AUTORIZACIÓN Y LÍMITES
+Esta meta autoriza todas las tareas técnicas del PRD sin pedir aprobación entre fases. Registra ese alcance en H-04 y conserva como pendientes solo las intervenciones humanas reales. No publiques en el dominio, no modifiques producción, no compres servicios ni ejecutes acciones externas irreversibles sin autorización específica. No inventes datos biográficos, proyectos reales, credenciales ni decisiones personales: usa ejemplos claramente identificados y deja lo que dependa de Adriel como tarea humana.
+
+FORMA DE TRABAJO
+1. Lee el PRD, las historias, los ADR, las instrucciones del repositorio y el estado actual del código. No repitas tareas ya completadas; confirma sus pruebas y continúa desde la primera tarea incompleta.
+2. Divide el trabajo en tareas pequeñas, autónomas y comprobables, con criterios de aceptación claros vinculados a pruebas. Ordena primero las tareas del agente por dependencias. Mantén todas las tareas humanas juntas al final del PRD.
+3. Antes de cada cambio de código, escribe las pruebas de aceptación y ejecútalas para comprobar que detectan la funcionalidad ausente. Después implementa y verifica. Usa `fast-check` en frontend y backend cuando haya propiedades útiles; antes, explica brevemente qué entradas y propiedades comprobarás y por qué. Conserva semillas y rutas de reproducción de fallos.
+4. Usa las decisiones existentes y “boring tech that works”. Mantén TypeScript, el stack y las dependencias acordadas; usa exclusivamente `pnpm`, nunca npm. Registra en un ADR las decisiones técnicas nuevas o modificadas.
+5. Si aparece trabajo nuevo, decide si puede hacerlo el agente. Si es técnico, añádelo en la posición correcta del PRD y continúa. Si depende realmente de una persona, registra al final qué falta, por qué no puedes resolverlo, qué hiciste, el resultado y el paso concreto para reanudar; sigue con tareas técnicas independientes. No marques bloqueos temporales como completados ni te detengas solo por una duda que puedas resolver con el repositorio o una alternativa segura.
+6. Para cambios sustanciales del PRD, solicita la revisión del modelo exacto `gpt-6-sol` y registra hallazgos y resolución. Si no está disponible, no finjas la revisión: deja esa tarea al final y continúa lo independiente.
+7. Para cerrar cada tarea, ejecuta `pnpm check` completo sobre el estado actual. Corrige también los fallos anteriores o ajenos al cambio. No omitas suites, relajes expectativas ni afirmes que una verificación pasó si no se ejecutó. Actualiza estados, ADR y evidencia del PRD.
+
+COMUNICACIÓN Y CIERRE
+Comunícate en español y de forma breve. Avanza sin pedir confirmaciones repetidas dentro de esta autorización. Agrupa al final las preguntas e intervenciones humanas imprescindibles, explicadas con pasos claros y sin abreviaturas innecesarias. No des la meta por completa hasta que todas las tareas técnicas autorizadas estén implementadas y `pnpm check` pase; informa cualquier pendiente humano con su impacto y siguiente paso.

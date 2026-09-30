@@ -1,0 +1,15 @@
+node_modules/
+dist/
+public/presentation.js
+public/project.js
+.env
+.env.*
+!.env.example
+data/
+backups/
+.tools/
+test-results/
+playwright-report/
+coverage/
+*.sqlite*
+.DS_Store

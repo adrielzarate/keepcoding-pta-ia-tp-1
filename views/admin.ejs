@@ -1,0 +1,19 @@
+<%- include('partials/head', { title: 'Presentation — Portfolio admin', description: 'Edit your personal presentation' }) %>
+<header class="site-header wrap"><a class="wordmark" href="/admin">Portfolio<span class="accent">.</span> <span class="badge">Admin</span></a><div class="header-actions"><a class="nav-link" href="/admin/projects">Projects</a><a class="nav-link" href="/">View website ↗</a><form method="post" action="/admin/logout"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="link-button" type="submit">Sign out</button></form></div></header>
+<main id="main" class="admin-shell wrap">
+  <aside class="admin-aside"><p class="eyebrow">Your workspace</p><a class="active-nav" href="/admin" aria-current="page">Presentation <span aria-hidden="true">↗</span></a><a class="side-nav" href="/admin/projects">Projects</a><p class="aside-note">A few words that<br>make it yours.</p></aside>
+  <section class="editor" aria-labelledby="editor-title"><p class="eyebrow">01 / Personal profile</p><h1 id="editor-title" class="page-title">Your introduction.</h1><p class="muted">Tell visitors who you are and what you do.</p>
+    <% if (saved) { %><p class="notice success" role="status">Your presentation has been saved.</p><% } %>
+    <% if (Object.keys(errors).length) { %><p class="notice error" role="alert">Please check the highlighted fields. Your changes have not been saved.</p><% } %>
+    <form method="post" action="/admin/presentation" class="stack editor-form" data-presentation-form>
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <% for (const [key, label] of [['name', 'Name'], ['title', 'Professional title']]) { %>
+      <div class="field"><label for="<%= key %>"><%= label %></label><input id="<%= key %>" name="<%= key %>" value="<%= profile[key] %>" maxlength="<%= limits[key] %>" required aria-invalid="<%= Boolean(errors[key]) %>" aria-describedby="<%= key %>-error"><p id="<%= key %>-error" class="field-error" data-error="<%= key %>"><%= errors[key] || '' %></p></div>
+      <% } %>
+      <div class="field"><label for="biography">Biography</label><p id="biography-hint" class="hint">Write in plain text. Use a blank line to start a new paragraph.</p><textarea id="biography" name="biography" rows="8" required maxlength="<%= limits.biography %>" aria-invalid="<%= Boolean(errors.biography) %>" aria-describedby="biography-hint biography-error"><%= profile.biography %></textarea><div class="field-meta"><p id="biography-error" class="field-error" data-error="biography"><%= errors.biography || '' %></p><span class="hint" data-biography-count><%= profile.biography.length %> / <%= limits.biography %></span></div></div>
+      <div class="save-row"><span class="hint" data-save-status aria-live="polite">Changes appear on your website after saving.</span><button class="button" type="submit">Save changes <span aria-hidden="true">↗</span></button></div>
+    </form>
+  </section>
+</main>
+<script type="module" src="/assets/presentation.js"></script>
+</body></html>
